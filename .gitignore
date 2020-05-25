@@ -1,7 +1,10 @@
 *~
-count
-token
+/.github/
+/count
+/token
 *.save
 *.log
-JSON.sh/*
-tmp-bot-bash/
+/JSON.sh/
+/data-bot-bash/
+/DIST/
+/STANDALONE/

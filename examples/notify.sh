@@ -1,8 +1,10 @@
 #!/bin/bash
+# file: notify.sh
+# example for an background job, run with startback notify.sh
 
 # This file is public domain in the USA and all free countries.
 # Elsewhere, consider it to be WTFPLv2. (wtfpl.net/txt/copying)
-#### $$VERSION$$ v0.52-0-gdb7b19f
+#### $$VERSION$$ v0.96-dev-7-g0153928
 
 # adjust your language setting here
 # https://github.com/topkecleon/telegram-bot-bash#setting-up-your-environment
@@ -25,6 +27,7 @@ else
 fi
 
 # output current time every $1 seconds
+date "+* It's %k:%M:%S o' clock ..."
 while sleep $SLEEP
 do
 	date "+* It's %k:%M:%S o' clock ..."

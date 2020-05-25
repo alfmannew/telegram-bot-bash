@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#### $$VERSION$$ v0.52-0-gdb7b19f
+#### $$VERSION$$ v0.96-dev-7-g0153928
 # shellcheck disable=SC2016
 #
 # Easy Versioning in git:
@@ -34,21 +34,34 @@
 # run this script to (re)place Version number in files
 #
 
+# magic to ensure that we're always inside the root of our application,
+# no matter from which directory we'll run script
+GIT_DIR=$(git rev-parse --git-dir 2>/dev/null)
+if [ "$GIT_DIR" != "" ] ; then
+	cd "$GIT_DIR/.." || exit 1
+else
+	echo "Sorry, no git repository $(pwd)" && exit 1
+fi
+
 unset IFS
 # set -f # if you are paranoid use set -f to disable globbing
 
 VERSION="$(git describe --tags --long)"
-echo "Update files to version $VERSION ..."
+echo "Update to version $VERSION ..."
 
-for file in * doc/*
+FILES="$(find ./*)"
+[ "$1" != "" ] && FILES="$*"
+
+for file in $FILES
 do
 	[ ! -f "$file" ] && continue
 	#[ "$file" == "version" ] && continue
-	echo -n " $file"
+	echo -n " $file" >&2
 	sed -i 's/^#### $$VERSION$$.*/#### \$\$VERSION\$\$ '"$VERSION"'/' "$file"
 done
 # try to compile README.txt
-echo -n " README.txt"
-pandoc -f markdown -t asciidoc  README.md | sed '/^\[\[/d' >README.txt
+echo -n " README.txt" >&2
+type -f pandoc >/dev/null && pandoc -s -f commonmark -M "title=Bashbot README" README.md >README.html
+fold -s README.md >README.txt
 echo " done."
 
